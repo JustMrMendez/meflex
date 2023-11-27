@@ -9,7 +9,7 @@ function App() {
 
 	return (
 		<ThemeProvider>
-			<div className="flex h-screen flex-col justify-between overflow-hidden container mx-auto w-full">
+			<div className="md:container h-screen overflow-hidden w-full flex flex-col justify-around">
 				<NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 				<Outlet />
 			</div>

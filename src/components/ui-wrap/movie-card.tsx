@@ -35,6 +35,7 @@ export type MovieDetails = {
 		name: string;
 		logo: string;
 	};
+	backDrop: string;
 };
 
 export type Rating = {
@@ -68,14 +69,19 @@ export function MovieCard({ movie }: MovieCardProps) {
 				<img
 					src={fileUrlConstructor(movie.poster)}
 					alt={`${movie.title} poster`}
-					className="w-full object-cover"
+					className="hidden md:block w-full object-cover"
+				/>
+				<img
+					src={fileUrlConstructor(movie.backDrop)}
+					alt={`${movie.title} poster`}
+					className="md:hidden w-full object-cover"
 				/>
 				<div
 					className="grid w-full gap-2 p-2 absolute -bottom-full backdrop-blur-md bg-slate-900/30 text-slate-100
                  group-hover:bottom-0 transition-all duration-300">
 					<ul className="flex space-x-2">
 						{movie.genres.map((genre) => (
-							<li>
+							<li key={genre}>
 								<Badge variant="default" key={genre}>
 									{genre}
 								</Badge>

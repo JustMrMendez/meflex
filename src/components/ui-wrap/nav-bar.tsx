@@ -66,7 +66,7 @@ export function NavBar({
 		console.log(searchTerm);
 	}, [searchTerm]);
 	return (
-		<div className="flex w-full justify-between py-2">
+		<div className="md:flex w-full justify-between py-2">
 			<NavigationMenu>
 				<NavigationMenuList>
 					<NavigationMenuItem>

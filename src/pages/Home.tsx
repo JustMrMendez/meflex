@@ -66,6 +66,7 @@ const movieCardDataConstructor = async (movie: Movie) => {
 				movieDetails.production_companies[0].logo_path
 			),
 		},
+		backDrop: fileUrlConstructor(movieDetails.backdrop_path)
 	};
 	return movieCardData;
 };
@@ -83,11 +84,11 @@ const Home = () => {
 			setResults(moviesData);
 		};
 		fetchMovies();
-	}, [data.results]); // Dependency array added
+	}, [data.results]);
 
 	return (
-		<ScrollArea className="flex justify-center items-center w-full">
-			<ul className="flex flex-wrap gap-4 w-full justify-between mx-auto">
+		<ScrollArea className="h-[90%] p-4 w-full">
+			<ul className="flex flex-wrap gap-4 w-full justify-center mx-auto">
 				{results.map((movie) => (
 					<li key={movie.id}>
 						<MovieCard movie={movie} />
