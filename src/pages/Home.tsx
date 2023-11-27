@@ -1,43 +1,100 @@
-import { MovieCard } from "@/components/ui-wrap/movie-card";
+/* eslint-disable react-refresh/only-export-components */
+import {
+	Movie,
+	MovieCard,
+	MovieDetails,
+} from "@/components/ui-wrap/movie-card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
 
-// export async function loader() {
-// 	const movies = await fetch(
+const api_key = import.meta.env.VITE_TMDB_TOKEN;
+const url =
+	"https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1";
+const options = {
+	method: "GET",
+	headers: {
+		accept: "application/json",
+		Authorization: `Bearer ${api_key}`,
+	},
+};
 
-const movieSample = {
-	title: "Naruto",
-	year: "2002–2007",
-	rated: "TV-PG",
-	released: "10 Sep 2005",
-	runtime: "24 min",
-	genre: "Animation, Action, Adventure",
-	director: "N/A",
-	writer: "Masashi Kishimoto",
-	actors: "Junko Takeuchi, Maile Flanagan, Kate Higgins",
-	plot: "Many years ago, in the hidden village of Konoha, lived a great demon fox. When it swung one of its nine tails, a tsunami occurred. The fourth hokage sealed this demon fox inside a boy in exchange for his own life. Naruto was that boy, and he grew up with no family, and the villagers hated him thinking that he himself was the demon fox. Naruto's dream is to become Hokage, and have the villagers acknowledge him.",
-	language: "Japanese",
-	country: "Japan",
-	awards: "N/A",
-	poster: "https://m.media-amazon.com/images/M/MV5BZmQ5NGFiNWEtMmMyMC00MDdiLTg4YjktOGY5Yzc2MDUxMTE1XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SX300.jpg",
-	ratings: [
-		{
-			source: "Internet Movie Database",
-			value: "8.4/10",
+type Data = {
+	page: number;
+	results: Movie[];
+	total_pages: number;
+	total_results: number;
+};
+
+export async function getMovies() {
+	try {
+		const response = await fetch(url, options);
+		const data: Data = await response.json();
+		return data;
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+export async function getMovieDetails(id: number) {
+	const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
+	const movieDetails = await fetch(url, options);
+	const data = await movieDetails.json();
+	return data;
+}
+
+const fileUrlConstructor = (path: string) =>
+	`https://image.tmdb.org/t/p/w500${path}`;
+
+const movieCardDataConstructor = async (movie: Movie) => {
+	const movieDetails = await getMovieDetails(movie.id);
+	const movieCardData = {
+		id: movieDetails.id,
+		title: movieDetails.title,
+		site: movieDetails.homepage,
+		poster: fileUrlConstructor(movieDetails.poster_path),
+		genres: movieDetails.genres.map(
+			(genre: { name: string }) => genre.name
+		),
+		overview: movieDetails.overview,
+		rating: movieDetails.vote_average,
+		releaseDate: movieDetails.release_date,
+		tagline: movieDetails.tagline,
+		productionCompany: {
+			name: movieDetails.production_companies[0].name,
+			logo: fileUrlConstructor(
+				movieDetails.production_companies[0].logo_path
+			),
 		},
-	],
-	metascore: "N/A",
-	imdbRating: "8.4",
-	imdbVotes: "119,590",
-	imdbID: "tt0409591",
-	type: "series",
-	totalSeasons: "1",
-	response: "True",
+	};
+	return movieCardData;
 };
 
 const Home = () => {
+	const data = useLoaderData() as Data;
+	const [results, setResults] = useState<MovieDetails[]>([]);
+
+	useEffect(() => {
+		const fetchMovies = async () => {
+			const moviesData = await Promise.all(
+				data.results.map(movieCardDataConstructor)
+			);
+			console.log(moviesData);
+			setResults(moviesData);
+		};
+		fetchMovies();
+	}, [data.results]); // Dependency array added
+
 	return (
-		<div className="h-screen flex justify-center items-center">
-			<MovieCard movie={movieSample} />
-		</div>
+		<ScrollArea className="flex justify-center items-center w-full">
+			<ul className="flex flex-wrap gap-4 w-full justify-between mx-auto">
+				{results.map((movie) => (
+					<li key={movie.id}>
+						<MovieCard movie={movie} />
+					</li>
+				))}
+			</ul>
+		</ScrollArea>
 	);
 };
 

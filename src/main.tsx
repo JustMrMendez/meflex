@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { createBrowserRouter } from "react-router-dom";
 import { RouterProvider } from "react-router-dom";
-import Home from "@/pages/Home.tsx";
+import Home, { getMovies } from "@/pages/Home.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -14,6 +14,7 @@ const router = createBrowserRouter([
 			{
 				path: "/",
 				element: <Home />,
+				loader: getMovies,
 			},
 		],
 	},

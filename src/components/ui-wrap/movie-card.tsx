@@ -5,28 +5,36 @@ import { Card, CardContent } from "@/components/ui/card";
 // import { Checkbox } from "@/components/ui/checkbox";
 
 export type Movie = {
+	adult: boolean;
+	backdrop_path: string;
+	genre_ids: number[];
+	id: number;
+	original_language: string;
+	original_title: string;
+	overview: string;
+	popularity: number;
+	poster_path: string;
+	release_date: string;
 	title: string;
-	year: string;
-	rated: string;
-	released: string;
-	runtime: string;
-	genre: string;
-	director: string;
-	writer: string;
-	actors: string;
-	plot: string;
-	language: string;
-	country: string;
-	awards: string;
+	video: boolean;
+	vote_average: number;
+	vote_count: number;
+};
+
+export type MovieDetails = {
+	id: number;
+	title: string;
+	site: string;
 	poster: string;
-	ratings: Rating[];
-	metascore: string;
-	imdbRating: string;
-	imdbVotes: string;
-	imdbID: string;
-	type: string;
-	totalSeasons: string;
-	response: string;
+	genres: string[];
+	overview: string;
+	rating: number;
+	releaseDate: string;
+	tagline: string;
+	productionCompany: {
+		name: string;
+		logo: string;
+	};
 };
 
 export type Rating = {
@@ -34,17 +42,12 @@ export type Rating = {
 	value: string;
 };
 
-type userData = {
-	watched?: boolean;
-	favorite?: boolean;
-	rating?: number;
-	whishlist?: boolean;
+type MovieCardProps = {
+	movie: MovieDetails;
 };
 
-type MovieCardProps = {
-	movie: Movie;
-	userData?: userData;
-};
+const fileUrlConstructor = (path: string) =>
+	`https://image.tmdb.org/t/p/w500${path}`;
 
 export function MovieCard({ movie }: MovieCardProps) {
 	return (
@@ -53,43 +56,41 @@ export function MovieCard({ movie }: MovieCardProps) {
 				<CardDescription>{movie.plot}</CardDescription>
 			</CardHeader> */}
 			<CardContent className="text-sm p-0 relative overflow-hidden">
-				<Badge variant="default" className="absolute top-2 left-2">
-					{movie.rated}
-				</Badge>
+				{/* <Badge variant="default" className="absolute top-2 left-2">
+					<img
+						src={fileUrlConstructor(movie.productionCompany.logo)}
+						alt=""
+					/>
+				</Badge> */}
 				<Badge variant="default" className="absolute top-2 right-2">
-					{movie.imdbRating}
+					{movie.rating.toFixed(1)}
 				</Badge>
 				<img
-					src={movie.poster}
+					src={fileUrlConstructor(movie.poster)}
 					alt={`${movie.title} poster`}
 					className="w-full object-cover"
 				/>
 				<div
 					className="grid w-full gap-2 p-2 absolute -bottom-full backdrop-blur-md bg-slate-900/30 text-slate-100
                  group-hover:bottom-0 transition-all duration-300">
-					<span>{movie.genre}</span>
+					<ul className="flex space-x-2">
+						{movie.genres.map((genre) => (
+							<li>
+								<Badge variant="default" key={genre}>
+									{genre}
+								</Badge>
+							</li>
+						))}
+					</ul>
 					<span className="flex justify-between items-center relative">
 						<span>
-							<strong>Released:</strong> {movie.released}
+							<strong>Released:</strong> {movie.releaseDate}
 						</span>
-						{/* <span className="flex justify-center">
-							<label htmlFor="watched">
-								Watched:
-							</label>
-								<Checkbox
-									id="watched"
-									checked={
-										!userData
-											? false
-											: userData.watched
-									}
-								/>
-						</span> */}
 					</span>
 					<span className="text-lg flex justify-between">
 						<span>{movie.title}</span>
 
-						<StarRating rating={Number(movie.imdbRating)} />
+						<StarRating rating={Number(movie.rating)} />
 					</span>
 				</div>
 			</CardContent>
