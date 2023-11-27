@@ -2,7 +2,7 @@
 import { StarRating } from "@/components/ui-wrap/star-rating";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 
 export type Movie = {
 	title: string;
@@ -46,7 +46,7 @@ type MovieCardProps = {
 	userData?: userData;
 };
 
-export function MovieCard({ movie, userData }: MovieCardProps) {
+export function MovieCard({ movie }: MovieCardProps) {
 	return (
 		<Card className="w-[350px] group overflow-hidden relative hover:shadow shadow-primary transition-all duration-300">
 			{/* <CardHeader className="p-2">

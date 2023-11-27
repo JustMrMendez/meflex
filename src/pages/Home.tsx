@@ -1,5 +1,8 @@
 import { MovieCard } from "@/components/ui-wrap/movie-card";
 
+// export async function loader() {
+// 	const movies = await fetch(
+
 const movieSample = {
 	title: "Naruto",
 	year: "2002–2007",
