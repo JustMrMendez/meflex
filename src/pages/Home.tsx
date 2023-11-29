@@ -9,8 +9,6 @@ import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
 const api_key = import.meta.env.VITE_TMDB_TOKEN;
-const url =
-	"https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1";
 const options = {
 	method: "GET",
 	headers: {
@@ -18,6 +16,8 @@ const options = {
 		Authorization: `Bearer ${api_key}`,
 	},
 };
+const url =
+	"https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1";
 
 type Data = {
 	page: number;
@@ -43,16 +43,20 @@ export async function getMovieDetails(id: number) {
 	return data;
 }
 
-const fileUrlConstructor = (path: string) =>
-	`https://image.tmdb.org/t/p/w500${path}`;
+const fileUrlConstructor = (path: string, w: string = "w500") =>
+	`https://image.tmdb.org/t/p/${w}${path}`;
 
-const movieCardDataConstructor = async (movie: Movie) => {
+export const movieCardDataConstructor = async (
+	movie: Movie,
+	posterW = "w500",
+	backdropW = "w500"
+) => {
 	const movieDetails = await getMovieDetails(movie.id);
 	const movieCardData = {
 		id: movieDetails.id,
 		title: movieDetails.title,
 		site: movieDetails.homepage,
-		poster: fileUrlConstructor(movieDetails.poster_path),
+		poster: fileUrlConstructor(movieDetails.poster_path, posterW),
 		genres: movieDetails.genres.map(
 			(genre: { name: string }) => genre.name
 		),
@@ -60,13 +64,16 @@ const movieCardDataConstructor = async (movie: Movie) => {
 		rating: movieDetails.vote_average,
 		releaseDate: movieDetails.release_date,
 		tagline: movieDetails.tagline,
-		productionCompany: {
-			name: movieDetails.production_companies[0].name,
-			logo: fileUrlConstructor(
-				movieDetails.production_companies[0].logo_path
-			),
-		},
-		backDrop: fileUrlConstructor(movieDetails.backdrop_path)
+		productionCompanies: movieDetails.production_companies.map(
+			(company: { name: string; logo_path: string }) => {
+				return {
+					name: company.name,
+					logo: fileUrlConstructor(company.logo_path),
+				};
+			}
+		),
+
+		backDrop: fileUrlConstructor(movieDetails.backdrop_path, backdropW),
 	};
 	return movieCardData;
 };
@@ -78,7 +85,7 @@ const Home = () => {
 	useEffect(() => {
 		const fetchMovies = async () => {
 			const moviesData = await Promise.all(
-				data.results.map(movieCardDataConstructor)
+				data.results.map((movie) => movieCardDataConstructor(movie))
 			);
 			console.log(moviesData);
 			setResults(moviesData);
@@ -87,8 +94,8 @@ const Home = () => {
 	}, [data.results]);
 
 	return (
-		<ScrollArea className="h-[90%] p-4 w-full">
-			<ul className="flex flex-wrap gap-4 w-full justify-center mx-auto">
+		<ScrollArea className="h-full px-4 w-full">
+			<ul className="flex flex-wrap gap-4 w-full justify-evenly mx-auto mt-4">
 				{results.map((movie) => (
 					<li key={movie.id}>
 						<MovieCard movie={movie} />

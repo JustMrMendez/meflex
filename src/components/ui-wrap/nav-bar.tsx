@@ -66,7 +66,7 @@ export function NavBar({
 		console.log(searchTerm);
 	}, [searchTerm]);
 	return (
-		<div className="md:flex w-full justify-between py-2">
+		<div className="md:flex w-full justify-between px-4 py-2">
 			<NavigationMenu>
 				<NavigationMenuList>
 					<NavigationMenuItem>
@@ -134,7 +134,7 @@ export function NavBar({
 					</NavigationMenuItem>
 				</NavigationMenuList>
 			</NavigationMenu>
-			<div className="flex items-center space-x-4">
+			<div className="flex items-center space-x-4 p-2">
 				<Input
 					placeholder="Search"
 					value={searchTerm}

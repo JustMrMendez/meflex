@@ -5,6 +5,7 @@ import "./index.css";
 import { createBrowserRouter } from "react-router-dom";
 import { RouterProvider } from "react-router-dom";
 import Home, { getMovies } from "@/pages/Home.tsx";
+import MoviePage, { getMovie } from "@/pages/MoviePage.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -17,6 +18,11 @@ const router = createBrowserRouter([
 				loader: getMovies,
 			},
 		],
+	},
+	{
+		path: "movie/:id",
+		element: <MoviePage />,
+		loader: getMovie,
 	},
 ]);
 
