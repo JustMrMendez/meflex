@@ -57,8 +57,8 @@ export default function Login() {
 					<div className="relative z-20 mt-auto">
 						<blockquote className="space-y-2">
 							<p className="text-lg">
-								“MeFlex is the best streaming service in the world. I
-								love it!”
+								“MeFlex is the best streaming service in the
+								world. I love it!”
 							</p>
 							<footer className="text-sm">Mr. Mendez</footer>
 						</blockquote>

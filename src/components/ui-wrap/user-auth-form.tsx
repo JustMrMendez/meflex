@@ -1,27 +1,56 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-expect-error - trying jsx
+// @ts-nocheck  - trying jsx
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signInUser } from "@/lib/firebase";
+import { useNavigate } from "react-router-dom";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [formFields, setFormFields] = useState({
+		email: "",
+		password: "",
+	});
 
-	async function onSubmit(event: React.SyntheticEvent) {
+	const { email, password } = formFields;
+	const navigate = useNavigate();
+
+	const resetFormFields = () => {
+		setFormFields({ email: "", password: "" });
+	};
+
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setIsLoading(true);
+		try {
+			const userCredentials = await signInUser(email, password);
 
-		setTimeout(() => {
+			if (userCredentials) {
+				resetFormFields();
+				navigate("/");
+			}
 			setIsLoading(false);
-		}, 3000);
-	}
+		} catch (error) {
+			console.log("Error signing in user: ", error.message);
+			setIsLoading(false);
+		}
+	};
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		setFormFields((prev) => ({ ...prev, [name]: value }));
+	};
 
 	return (
 		<div className={cn("grid gap-6", className)} {...props}>
-			<form onSubmit={onSubmit}>
+			<form onSubmit={handleSubmit}>
 				<div className="grid gap-2">
 					<div className="grid gap-1">
 						<Label className="sr-only" htmlFor="email">
@@ -29,8 +58,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 						</Label>
 						<Input
 							id="email"
+							name="email"
 							placeholder="name@example.com"
 							type="email"
+							value={email}
+							onChange={handleChange}
 							autoCapitalize="none"
 							autoComplete="email"
 							autoCorrect="off"
@@ -41,15 +73,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 						</Label>
 						<Input
 							id="password"
+							name="password"
 							placeholder="********"
 							type="password"
+							value={password}
+							onChange={handleChange}
 							autoCapitalize="none"
 							autoComplete="password"
 							autoCorrect="off"
 							disabled={isLoading}
 						/>
 					</div>
-					<Button disabled={isLoading}>
+					<Button type="submit" disabled={isLoading}>
 						{isLoading && (
 							<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
 						)}
