@@ -13,12 +13,13 @@ import RequireAuth from "@/lib/require-auth.tsx";
 
 const withAuthProvider = (
 	Component: React.ComponentType,
-	requireAuth = false
+	requireAuth = false,
+	reload = false
 ) => {
 	return (
 		<AuthProvider>
 			{requireAuth ? (
-				<RequireAuth>
+				<RequireAuth reload={reload}>
 					<Component />
 				</RequireAuth>
 			) : (
@@ -31,7 +32,7 @@ const withAuthProvider = (
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: withAuthProvider(App, true),
+		element: withAuthProvider(App, true, true),
 		children: [
 			{
 				path: "/",
