@@ -5,8 +5,10 @@ import {
 	MovieDetails,
 } from "@/components/ui-wrap/movie-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { AuthContext } from "@/lib/context/auth-context";
+import Cookie from "js-cookie";
+import { useContext, useEffect, useState } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 
 const api_key = import.meta.env.VITE_TMDB_TOKEN;
 const options = {
@@ -27,6 +29,7 @@ type Data = {
 };
 
 export async function getMovies() {
+	if (Cookie.get("userAuth") === "false" ) return { results: [] };
 	try {
 		const response = await fetch(url, options);
 		const data: Data = await response.json();
@@ -79,10 +82,13 @@ export const movieCardDataConstructor = async (
 };
 
 const Home = () => {
-	const data = useLoaderData() as Data;
+	const { currentUser } = useContext(AuthContext);
 	const [results, setResults] = useState<MovieDetails[]>([]);
+	const data = useLoaderData() as Data
 
 	useEffect(() => {
+		if (!currentUser) return;
+
 		const fetchMovies = async () => {
 			const moviesData = await Promise.all(
 				data.results.map((movie) => movieCardDataConstructor(movie))
@@ -90,19 +96,34 @@ const Home = () => {
 			console.log(moviesData);
 			setResults(moviesData);
 		};
+
 		fetchMovies();
-	}, [data.results]);
+	}, [currentUser, data.results]);
 
 	return (
-		<ScrollArea className="h-full px-4 w-full">
-			<ul className="flex flex-wrap gap-4 w-full justify-evenly mx-auto mt-4">
-				{results.map((movie) => (
-					<li key={movie.id}>
-						<MovieCard movie={movie} />
-					</li>
-				))}
-			</ul>
-		</ScrollArea>
+		<>
+			{currentUser ? (
+				<ScrollArea className="h-full px-4 w-full">
+					<ul className="flex flex-wrap gap-4 w-full justify-evenly mx-auto mt-4">
+						{results.map((movie) => (
+							<li key={movie.id}>
+								<MovieCard movie={movie} />
+							</li>
+						))}
+					</ul>
+				</ScrollArea>
+			) : (
+				<div className="h-full px-4 w-full text-center">
+					<h1>
+						You need to Login to see the movies.
+						<Link to="/auth/login" className="text-blue-500">
+							{" "}
+							Click here{" "}
+						</Link>
+					</h1>
+				</div>
+			)}
+		</>
 	);
 };
 

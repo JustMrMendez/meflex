@@ -127,9 +127,9 @@ export function NavBar({
 					</NavigationMenuItem>
 					<NavigationMenuItem>
 						<Link
-							to="/docs"
+							to="/login"
 							className={navigationMenuTriggerStyle()}>
-							Documentation
+							Login / Sign up
 						</Link>
 					</NavigationMenuItem>
 				</NavigationMenuList>

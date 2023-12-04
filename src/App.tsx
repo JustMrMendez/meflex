@@ -8,7 +8,7 @@ function App() {
 	const [searchTerm, setSearchTerm] = useState("");
 
 	return (
-		<ThemeProvider>
+		<ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
 			<div className="md:container h-screen overflow-hidden w-full flex flex-col justify-start">
 				<NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 				<Outlet />
