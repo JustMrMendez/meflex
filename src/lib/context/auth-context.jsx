@@ -6,8 +6,7 @@ import { SignOutUser, userStateListener } from "../firebase";
 
 export const AuthContext = createContext({
 	currentUser: {},
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	setCurrentUser: (_user) => {},
+	setCurrentUser: () => {},
 	signOut: () => {},
 });
 
