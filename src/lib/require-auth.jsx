@@ -6,11 +6,6 @@ function RequireAuth({
 	children,
 	reload = false,
 	to = "auth/login",
-}: {
-	children: JSX.Element;
-	reload?: boolean;
-	to?: string;
-	redirect?: string;
 }) {
 	const { currentUser } = useContext(AuthContext);
 	const location = useLocation();
@@ -20,8 +15,6 @@ function RequireAuth({
 	}
 
 	if (!currentUser && !reload) {
-		// Redirect the user to the home page.
-		// Please! Close the mustache {{}}
 		return (
 			<Navigate
 				to={`${to}/${location.pathname}`}

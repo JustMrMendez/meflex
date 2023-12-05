@@ -12,7 +12,7 @@ import { AuthProvider } from "@/lib/context/auth-context.tsx";
 import RequireAuth from "@/lib/require-auth.tsx";
 
 const withAuthProvider = (
-	Component: React.ComponentType,
+	Component,
 	requireAuth = false,
 	reload = false
 ) => {
