@@ -10,16 +10,13 @@ import Login from "@/pages/auth/Login.tsx";
 import AuthLayout from "@/pages/auth/AuthLayout.tsx";
 import { AuthProvider } from "@/lib/context/auth-context.tsx";
 import RequireAuth from "@/lib/require-auth.tsx";
+import PrivateApp from "./PrivateApp.jsx";
 
-const withAuthProvider = (
-	Component,
-	requireAuth = false,
-	reload = false
-) => {
+const withAuthProvider = (Component, requireAuth = false,) => {
 	return (
 		<AuthProvider>
 			{requireAuth ? (
-				<RequireAuth reload={reload}>
+				<RequireAuth>
 					<Component />
 				</RequireAuth>
 			) : (
@@ -60,9 +57,13 @@ const router = createBrowserRouter([
 		path: "*",
 		element: <div>404</div>,
 	},
+	{
+		path: "/private",
+		element: <PrivateApp />,
+	}
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
 		<RouterProvider router={router}></RouterProvider>
 	</React.StrictMode>
