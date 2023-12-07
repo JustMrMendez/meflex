@@ -58,7 +58,7 @@ export default function Login() {
 						<blockquote className="space-y-2">
 							<p className="text-lg">
 								“MeFlex is the best streaming service in the
-								world. I love it!”
+								world. I love it!, and should you”
 							</p>
 							<footer className="text-sm">Mr. Mendez</footer>
 						</blockquote>
