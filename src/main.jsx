@@ -11,8 +11,9 @@ import AuthLayout from "@/pages/auth/AuthLayout.tsx";
 import { AuthProvider } from "@/lib/context/auth-context.tsx";
 import RequireAuth from "@/lib/require-auth.tsx";
 import PrivateApp from "./PrivateApp.jsx";
+import { LoginTest } from "./components/LoginTest.jsx";
 
-const withAuthProvider = (Component, requireAuth = false,) => {
+const withAuthProvider = (Component, requireAuth = false) => {
 	return (
 		<AuthProvider>
 			{requireAuth ? (
@@ -44,14 +45,14 @@ const router = createBrowserRouter([
 		loader: getMovie,
 	},
 	{
-		path: "auth",
-		element: withAuthProvider(AuthLayout),
-		children: [
-			{
-				path: "login",
-				element: <Login />,
-			},
-		],
+		// path: "auth",
+		// element: withAuthProvider(AuthLayout),
+		// children: [
+		// 	{
+			// 	},
+			// ],
+		path: "/login",
+		element: <LoginTest />,
 	},
 	{
 		path: "*",
@@ -59,8 +60,8 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/private",
-		element: <PrivateApp />,
-	}
+		element: withAuthProvider(PrivateApp),
+	},
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

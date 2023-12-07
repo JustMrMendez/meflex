@@ -10,10 +10,8 @@ import { Label } from "@/components/ui/label";
 import { signInUser } from "@/lib/firebase";
 import { useNavigate } from "react-router-dom";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-	const [isLoading, setIsLoading] = useState<boolean>(false);
+export function UserAuthForm({ className, ...props }) {
+	const [isLoading, setIsLoading] = useState(false);
 	const [formFields, setFormFields] = useState({
 		email: "",
 		password: "",
@@ -26,7 +24,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 		setFormFields({ email: "", password: "" });
 	};
 
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setIsLoading(true);
 		try {
@@ -43,7 +41,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 		}
 	};
 
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (event) => {
 		const { name, value } = event.target;
 		setFormFields((prev) => ({ ...prev, [name]: value }));
 	};
