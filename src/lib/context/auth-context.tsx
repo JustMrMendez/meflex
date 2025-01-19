@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "firebase/auth";
 import { SignOutUser, userStateListener } from "../firebase";
-import Cookies from "js-cookie"; // If using js-cookie
+import Cookies from "js-cookie";
 
 interface Props {
 	children?: React.ReactNode;

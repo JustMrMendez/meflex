@@ -32,19 +32,19 @@ const withAuthProvider = (
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: withAuthProvider(App, true, true),
+		element: withAuthProvider(App, true),
 		children: [
 			{
 				path: "/",
 				element: <Home />,
 				loader: getMovies,
 			},
+			{
+				path: "movie/:id",
+				element: withAuthProvider(MoviePage, true, false),
+				loader: getMovie,
+			},
 		],
-	},
-	{
-		path: "movie/:id",
-		element: <MoviePage />,
-		loader: getMovie,
 	},
 	{
 		path: "auth",
